@@ -36,9 +36,11 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
     }
   }
 
+  // --- GA4 EVENT FIRING ---
   const fireGA4Conversion = () => {
     if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "lead_submission", {
+      // Primary GA4 conversion event name (matches your GA dashboard)
+      ;(window as any).gtag("event", "purchase", {
         event_category: "conversion",
         event_label: formData.helpType,
         value: 1,
@@ -113,7 +115,6 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              
               {/* FIRST + LAST NAME */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
