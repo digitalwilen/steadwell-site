@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 
 interface ContactFormProps {
   selectedService: "Move & Estate" | "Aging-in-Place" | "Both / Not Sure"
-  setSelectedService: (service: "Move & Estate" | "Aging-in-Place" | "Both / Not Sure") => void
+  setSelectedService: (s: "Move & Estate" | "Aging-in-Place" | "Both / Not Sure") => void
 }
 
 export default function ContactForm({ selectedService, setSelectedService }: ContactFormProps) {
@@ -38,7 +38,7 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
 
   const fireGA4Conversion = () => {
     if (typeof window !== "undefined" && (window as any).gtag) {
-      ;(window as any).gtag("event", "lead_submission", {
+      (window as any).gtag("event", "lead_submission", {
         event_category: "conversion",
         event_label: formData.helpType,
         value: 1,
@@ -61,7 +61,6 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
       })
 
       if (response.ok) {
-        // ****** FIRE GA4 CONVERSION EVENT ******
         fireGA4Conversion()
 
         setSubmitted(true)
@@ -73,10 +72,11 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
           helpType: "Move & Estate",
           situation: "",
         })
+
         setTimeout(() => setSubmitted(false), 5000)
       }
-    } catch (error) {
-      console.error("Form submission error:", error)
+    } catch (err) {
+      console.error("Form submission error:", err)
     } finally {
       setLoading(false)
     }
@@ -107,12 +107,102 @@ export default function ContactForm({ selectedService, setSelectedService }: Con
                 </svg>
               </div>
               <p className="text-lg font-semibold mb-2">Thank you!</p>
-              <p className="text-foreground/70">A coordinator will follow up within one business day.</p>
+              <p className="text-foreground/70">
+                A coordinator will follow up within one business day.
+              </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* form fields unchanged */}
-              {/* ... */}
+              
+              {/* FIRST + LAST NAME */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2">First Name</label>
+                  <input
+                    required
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Last Name</label>
+                  <input
+                    required
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              {/* EMAIL + PHONE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Email</label>
+                  <input
+                    required
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Phone</label>
+                  <input
+                    required
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              {/* HELP TYPE */}
+              <div>
+                <label className="block text-sm font-medium mb-2">What do you need help with?</label>
+                <select
+                  name="helpType"
+                  value={formData.helpType}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                >
+                  <option>Move & Estate</option>
+                  <option>Aging-in-Place</option>
+                  <option>Both / Not Sure</option>
+                </select>
+              </div>
+
+              {/* SITUATION */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Tell us about your situation</label>
+                <textarea
+                  name="situation"
+                  value={formData.situation}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              {/* BUTTON */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 rounded-xl bg-primary text-white font-semibold text-lg hover:bg-primary/90 disabled:opacity-50"
+              >
+                {loading ? "Submitting..." : "Schedule Your Free 20-Minute Clarity Call"}
+              </button>
             </form>
           )}
         </div>
