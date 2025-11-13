@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 export default function Hero() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
@@ -70,10 +72,13 @@ export default function Hero() {
           {/* Right Column - Hero Image */}
           <div className="flex justify-center">
             <div className="relative w-full h-96 bg-gradient-to-br from-[#F7F2EC] to-[#0A7A57]/10 rounded-3xl overflow-hidden shadow-lg">
-              <img
-                src="/placeholder.svg?height=400&width=400"
-                alt="Adult child and aging parent working together on move preparations"
+              <Image
+                src="/hero-family-transition.webp"
+                alt="Adult child and aging parent reviewing plans together during a home transition"
+                width={1920}
+                height={1080}
                 className="w-full h-full object-cover"
+                priority
               />
             </div>
           </div>
